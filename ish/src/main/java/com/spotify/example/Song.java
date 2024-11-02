@@ -5,22 +5,12 @@ public class Song {
   private String name;
   private String artist;
   private String fileName;
+  private boolean isFavorite = false; // New attribute
   
   // serializes attributes into a string
   @Override
   public String toString() {
-    String s;
-
-    // since the object is complex, we return a JSON formatted string
-    s = "{ ";
-    s += "name: " + name;
-    s += ", ";
-    s += "artist: " + artist;
-    s += ", ";
-    s += "fileName: " + fileName;
-    s += " }";
-
-    return s;
+    return "Name: " + name + ", Artist: " + artist + (isFavorite ? " [Favorite]" : "");
   }
 
   // getters
@@ -34,5 +24,13 @@ public class Song {
 
   public String fileName() {
     return this.fileName;
+  }
+
+  public boolean isFavorite() {
+    return isFavorite;
+  }
+
+  public void setFavorite(boolean favorite) {
+    isFavorite = favorite;
   }
 }
