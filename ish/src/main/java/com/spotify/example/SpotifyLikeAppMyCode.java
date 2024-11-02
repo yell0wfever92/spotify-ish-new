@@ -19,7 +19,7 @@ public class SpotifyLikeAppMyCode {
 
   @SuppressWarnings("FieldMayBeFinal")
   private static String directoryPath =
-    "\"C:\\Users\\myxbo\\OneDrive\\Documents\\GitHub\\spotify-ish\\ish\\src\\main\\java\\com\\spotify\\example\"";
+    "C:\\Users\\myxbo\\OneDrive\\Documents\\GitHub\\spotify-ish-new\\ish\\src\\main\\java\\com\\spotify\\example";
 
   // "main" makes this class a java app that can be executed
   @SuppressWarnings("ConvertToTryWithResources")
@@ -79,15 +79,48 @@ public class SpotifyLikeAppMyCode {
             displayLibrary(library);
         }
         case "p" -> {
-            System.out.println("-->Play<--");
-            play(library);
+          System.out.println("-->Play<--");
+          displayLibrary(library);
+          System.out.println("Enter the number of the song you want to play:");
+          try {
+              int choice = Integer.parseInt(input.nextLine());
+              if (choice >= 1 && choice <= library.length) {
+                  playSong(library[choice - 1]);
+              } else {
+                  System.out.println("Invalid choice.");
+              }
+          } catch (NumberFormatException e) {
+              System.out.println("Invalid input.");
+          }
         }
         case "q" -> System.out.println("-->Quit<--");
         default -> {
         }
     }
   }
+  /*
+  plays a song
+  */
+  public static void playSong(Song song) {
+    if (audioClip != null) {
+        audioClip.close();
+    }
 
+    try {
+        String filename = song.fileName();
+        String filePath = directoryPath + "\\wav\\" + filename;
+        File file = new File(filePath);
+
+        audioClip = AudioSystem.getClip();
+        final AudioInputStream in = AudioSystem.getAudioInputStream(file);
+
+        audioClip.open(in);
+        audioClip.setMicrosecondPosition(0);
+        audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
   /*
    * plays an audio file
    */
@@ -126,10 +159,13 @@ public class SpotifyLikeAppMyCode {
    */
   public static void displayLibrary(Song[] library) {
     System.out.println("---- Library ----");
+    int index = 1;
     for (Song song : library) {
-        System.out.println(song);
+        System.out.println(index + ". " + song);
+        index++;
     }
-  }
+}
+
 
   /*
    * searches the library for a song by title
