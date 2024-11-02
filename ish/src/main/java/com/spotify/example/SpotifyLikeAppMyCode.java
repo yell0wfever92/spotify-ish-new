@@ -77,8 +77,23 @@ public class SpotifyLikeAppMyCode {
             searchByTitle(library, input);
         }
         case "l" -> {
-            System.out.println("-->Library<--");
-            displayLibrary(library);
+          System.out.println("-->Library<--");
+          displayLibrary(library);
+          System.out.println("Would you like to play one of these songs? (y/n)");
+          String response = input.nextLine().toLowerCase();
+          if (response.equals("y")) {
+            System.out.println("Enter the number of the song you want to play:");
+            try {
+                int choice = Integer.parseInt(input.nextLine());
+                if (choice >= 1 && choice <= library.length) {
+                    playSong(library[choice - 1]);
+                } else {
+                    System.out.println("Invalid choice.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input.");
+            }
+          }
         }
         case "p" -> {
           System.out.println("-->Play<--");
@@ -103,6 +118,7 @@ public class SpotifyLikeAppMyCode {
   /*
   plays a song
   */
+  @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
   public static void playSong(Song song) {
     if (audioClip != null) {
         audioClip.close();
@@ -175,10 +191,19 @@ public class SpotifyLikeAppMyCode {
   public static void searchByTitle(Song[] library, Scanner input) {
     // get the title from the user
     String title = input.nextLine().toLowerCase();
+    @SuppressWarnings("unused")
+    boolean found = false;
     List<Song> matchingSongs = new ArrayList<>();
     for (Song song : library) {
         if (song.name().toLowerCase().contains(title)) {
-            matchingSongs.add(song);
+            System.out.println(song);
+            found = true;
+            System.out.println("Would you like to play this song? (y/n)");
+            String response = input.nextLine().toLowerCase();
+            if (response.equals("y")) {
+                playSong(song);
+                break; // Exit after playing the song
+            }
         }
     }
     if (matchingSongs.isEmpty()) {
