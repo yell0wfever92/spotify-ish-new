@@ -2,6 +2,8 @@ package com.spotify.example;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.sound.sampled.AudioInputStream;
@@ -172,16 +174,37 @@ public class SpotifyLikeAppMyCode {
    */
   public static void searchByTitle(Song[] library, Scanner input) {
     // get the title from the user
-    String title = input.nextLine().toLowerCase(); // Convert user input to lowercase
-    boolean found = false;
+    String title = input.nextLine().toLowerCase();
+    List<Song> matchingSongs = new ArrayList<>();
     for (Song song : library) {
-        if (song.name().toLowerCase().contains(title)) { // Convert song name to lowercase
-            System.out.println(song);
-            found = true;
+        if (song.name().toLowerCase().contains(title)) {
+            matchingSongs.add(song);
         }
     }
-    if (!found) {
+    if (matchingSongs.isEmpty()) {
         System.out.println("No songs found with the title: " + title);
+    } else {
+        System.out.println("Found the following songs:");
+        int index = 1;
+        for (Song song : matchingSongs) {
+            System.out.println(index + ". " + song);
+            index++;
+        }
+        System.out.println("Would you like to play one of these songs? (y/n)");
+        String response = input.nextLine().toLowerCase();
+        if (response.equals("y")) {
+            System.out.println("Enter the number of the song you want to play:");
+            try {
+                int choice = Integer.parseInt(input.nextLine());
+                if (choice >= 1 && choice <= matchingSongs.size()) {
+                    playSong(matchingSongs.get(choice - 1));
+                } else {
+                    System.out.println("Invalid choice.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input.");
+            }
+        }
     }
   }
 
@@ -190,7 +213,7 @@ public class SpotifyLikeAppMyCode {
   public static Song[] readAudioLibrary() {
     // get the file path
     final String jsonFileName = "audio-library.json";
-    final String filePath = "C:\\Users\\myxbo\\OneDrive\\Documents\\GitHub\\spotify-ish\\ish\\src\\main\\java\\com\\spotify\\example" + "\\" + jsonFileName;
+    final String filePath = directoryPath + "\\" + jsonFileName;
 
     Song[] library = null;
     try {
