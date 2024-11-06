@@ -18,96 +18,96 @@ import com.google.gson.stream.JsonReader;
 public class SpotifyLikeAppMyCode {
 
   // the current audio clip
-  private static Clip audioClip;
+private static Clip audioClip;
 
-  @SuppressWarnings("FieldMayBeFinal")
-  private static String directoryPath =
-    "C:\\Users\\myxbo\\OneDrive\\Documents\\GitHub\\spotify-ish-new\\ish\\src\\main\\java\\com\\spotify\\example";
+@SuppressWarnings("FieldMayBeFinal")
+private static String directoryPath =
+    "C:\\Users\\myxbo\\OneDrive\\Documents\\GitHub\\spotify-ish-new\\ish\\src\\main\\java\\com\\spotify\\example\\wav";
 
   // "main has been updated to start the GUI"
-  @SuppressWarnings("ConvertToTryWithResources")
-  public static void main(final String[] args) {
+@SuppressWarnings("ConvertToTryWithResources")
+public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> {
         Song[] library = readAudioLibrary();
-        String directoryPath = getDirectoryPath();
-        new SpotifyLikeAppGUI(library, directoryPath);
+        String localDirectoryPath = getDirectoryPath();
+        new SpotifyLikeAppGUI(library, localDirectoryPath);
     });
 }
 
-  @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
-  public static void playSong(Song song) {
-  if (audioClip != null) {
-      audioClip.close();
-  }
+@SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
+public static void playSong(Song song) {
+if (audioClip != null) {
+audioClip.close();
+}
 
-  try {
-      String filename = song.fileName();
-      String filePath = directoryPath + "\\wav\\" + filename;
-      File file = new File(filePath);
+try {
+String filename = song.fileName();
+String filePath = directoryPath + "\\wav\\" + filename;
+File file = new File(filePath);
 
-      audioClip = AudioSystem.getClip();
-      final AudioInputStream in = AudioSystem.getAudioInputStream(file);
+audioClip = AudioSystem.getClip();
+final AudioInputStream in = AudioSystem.getAudioInputStream(file);
 
-      audioClip.open(in);
-      audioClip.setMicrosecondPosition(0);
+audioClip.open(in);
+audioClip.setMicrosecondPosition(0);
       audioClip.loop(0); // Play once
-  } catch (Exception e) {
-      e.printStackTrace();
-  }
+} catch (Exception e) {
+e.printStackTrace();
+}
 }
 
 public static void playFromLibrary(Song[] library, Scanner input) {
-  System.out.println("Enter the number of the song you want to play:");
-  try {
-      int choice = Integer.parseInt(input.nextLine());
-      if (choice >= 1 && choice <= library.length) {
-          playSong(library[choice - 1]);
-      } else {
-          System.out.println("Invalid choice.");
-      }
-  } catch (NumberFormatException e) {
-      System.out.println("Invalid input.");
-  }
+System.out.println("Enter the number of the song you want to play:");
+try {
+    int choice = Integer.parseInt(input.nextLine());
+    if (choice >= 1 && choice <= library.length) {
+        playSong(library[choice - 1]);
+    } else {
+        System.out.println("Invalid choice.");
+    }
+} catch (NumberFormatException e) {
+System.out.println("Invalid input.");
+}
 }
 
 public static void markFavoriteFromLibrary(Song[] library, Scanner input) {
-  System.out.println("Enter the number of the song you want to mark as favorite:");
-  try {
-      int choice = Integer.parseInt(input.nextLine());
-      if (choice >= 1 && choice <= library.length) {
-          Song song = library[choice - 1];
-          song.setFavorite(true);
-          System.out.println("Marked as favorite: " + song.name());
-      } else {
-          System.out.println("Invalid choice.");
-      }
-  } catch (NumberFormatException e) {
-      System.out.println("Invalid input.");
-  }
+System.out.println("Enter the number of the song you want to mark as favorite:");
+try {
+    int choice = Integer.parseInt(input.nextLine());
+    if (choice >= 1 && choice <= library.length) {
+        Song song = library[choice - 1];
+        song.setFavorite(true);
+        System.out.println("Marked as favorite: " + song.name());
+    } else {
+        System.out.println("Invalid choice.");
+    }
+} catch (NumberFormatException e) {
+    System.out.println("Invalid input.");
+}
 }
 
 public static void playFromFavorites(Song[] library, Scanner input) {
-  List<Song> favorites = new ArrayList<>();
-  for (Song song : library) {
-      if (song.isFavorite()) {
-          favorites.add(song);
-      }
-  }
-  if (favorites.isEmpty()) {
-      System.out.println("You have no favorite songs to play.");
-      return;
-  }
-  System.out.println("Enter the number of the favorite song you want to play:");
-  try {
-      int choice = Integer.parseInt(input.nextLine());
-      if (choice >= 1 && choice <= favorites.size()) {
-          playSong(favorites.get(choice - 1));
-      } else {
-          System.out.println("Invalid choice.");
-      }
-  } catch (NumberFormatException e) {
-      System.out.println("Invalid input.");
-  }
+List<Song> favorites = new ArrayList<>();
+for (Song song : library) {
+    if (song.isFavorite()) {
+        favorites.add(song);
+    }
+}
+if (favorites.isEmpty()) {
+    System.out.println("You have no favorite songs to play.");
+    return;
+}
+System.out.println("Enter the number of the favorite song you want to play:");
+try {
+    int choice = Integer.parseInt(input.nextLine());
+    if (choice >= 1 && choice <= favorites.size()) {
+        playSong(favorites.get(choice - 1));
+    } else {
+        System.out.println("Invalid choice.");
+    }
+} catch (NumberFormatException e) {
+    System.out.println("Invalid input.");
+}
 }
 
 /*

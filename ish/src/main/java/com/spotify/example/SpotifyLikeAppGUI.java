@@ -21,9 +21,9 @@ public class SpotifyLikeAppGUI {
     private JButton homeButton, searchButton, libraryButton, favoritesButton, quitButton;
     private JButton playButton, stopButton, rewindButton;
     private JTextArea displayArea;
-    private Song[] library;
-    private List<Song> favorites;
-    private String directoryPath;
+    private final Song[] library;
+    private final List<Song> favorites;
+    private final String directoryPath;
     private Clip audioClip;
 
     public SpotifyLikeAppGUI(Song[] library, String directoryPath) {
@@ -78,6 +78,7 @@ public class SpotifyLikeAppGUI {
         frame.setVisible(true);
     }
 
+    @SuppressWarnings("unused")
     private void addActionListeners() {
         homeButton.addActionListener(e -> displayHome());
         searchButton.addActionListener(e -> searchSongs());
@@ -173,6 +174,7 @@ public class SpotifyLikeAppGUI {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private void playSong(Song song) {
         stopSong(); // Stop any currently playing song
         try {
