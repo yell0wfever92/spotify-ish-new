@@ -40,8 +40,8 @@ public class Song {
         if (obj == null || getClass() != obj.getClass()) return false;
         Song song = (Song) obj;
         return Objects.equals(name, song.name) &&
-           Objects.equals(artist, song.artist) &&
-           Objects.equals(fileName, song.fileName);
+        Objects.equals(artist, song.artist) &&
+        Objects.equals(fileName, song.fileName);
     }
 
     @Override

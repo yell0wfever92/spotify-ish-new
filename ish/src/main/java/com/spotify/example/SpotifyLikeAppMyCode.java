@@ -22,15 +22,15 @@ private static Clip audioClip;
 
 @SuppressWarnings("FieldMayBeFinal")
 private static String directoryPath =
-    "C:\\Users\\myxbo\\OneDrive\\Documents\\GitHub\\spotify-ish-new\\ish\\src\\main\\java\\com\\spotify\\example\\wav";
+    "C:\\Users\\myxbo\\OneDrive\\Documents\\GitHub\\spotify-ish-new\\ish\\src\\main\\java\\com\\spotify\\example";
 
   // "main has been updated to start the GUI"
 @SuppressWarnings("ConvertToTryWithResources")
 public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> {
         Song[] library = readAudioLibrary();
-        String localDirectoryPath = getDirectoryPath();
-        new SpotifyLikeAppGUI(library, localDirectoryPath);
+        String directoryPath = getDirectoryPath();
+        new SpotifyLikeAppGUI(library, directoryPath);
     });
 }
 
