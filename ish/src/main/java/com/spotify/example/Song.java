@@ -1,36 +1,52 @@
 package com.spotify.example;
 
+import java.util.Objects;
+
 public class Song {
 
-  private String name;
-  private String artist;
-  private String fileName;
-  private boolean isFavorite = false; // New attribute
-  
-  // serializes attributes into a string
-  @Override
-  public String toString() {
-    return "Name: " + name + ", Artist: " + artist + (isFavorite ? " [Favorite]" : "");
-  }
+    private String name;
+    private String artist;
+    private String fileName;
+    private boolean isFavorite = false;
 
-  // getters
-  public String name() {
-    return this.name;
-  }
+    @Override
+    public String toString() {
+        return "Name: " + name + ", Artist: " + artist + (isFavorite ? " [Favorite]" : "");
+    }
 
-  public String artist() {
-    return this.artist;
-  }
+    public String name() {
+        return this.name;
+    }
 
-  public String fileName() {
-    return this.fileName;
-  }
+    public String artist() {
+        return this.artist;
+    }
 
-  public boolean isFavorite() {
-    return isFavorite;
-  }
+    public String fileName() {
+        return this.fileName;
+    }
 
-  public void setFavorite(boolean favorite) {
-    isFavorite = favorite;
-  }
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Song song = (Song) obj;
+        return Objects.equals(name, song.name) &&
+           Objects.equals(artist, song.artist) &&
+           Objects.equals(fileName, song.fileName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, artist, fileName);
+    }
+
 }

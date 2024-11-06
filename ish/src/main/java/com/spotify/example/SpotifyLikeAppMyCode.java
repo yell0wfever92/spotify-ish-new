@@ -24,7 +24,7 @@ public class SpotifyLikeAppMyCode {
   private static String directoryPath =
     "C:\\Users\\myxbo\\OneDrive\\Documents\\GitHub\\spotify-ish-new\\ish\\src\\main\\java\\com\\spotify\\example";
 
-  // "main" makes this class a java app that can be executed
+  // "main has been updated to start the GUI"
   @SuppressWarnings("ConvertToTryWithResources")
   public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> {
@@ -32,56 +32,6 @@ public class SpotifyLikeAppMyCode {
         String directoryPath = getDirectoryPath();
         new SpotifyLikeAppGUI(library, directoryPath);
     });
-}
-
-  /*
-   * displays the menu for the app
-   */
-  public static void menu() {
-    System.out.println("---- SpotifyLikeApp ----");
-    System.out.println("[H]ome");
-    System.out.println("[S]earch by title");
-    System.out.println("[L]ibrary");
-    System.out.println("[F]avorites"); // Added new option as Play is now integrated into "S" and "L"
-    System.out.println("[Q]uit");
-    System.out.println("");
-    System.out.print("Enter q to Quit:");
-  }
-
-  /*
-   * handles the user input for the app
-   */
-  public static void handleMenu(String userInput, Song[] library, Scanner input) {
-    switch (userInput) {
-        case "h" -> System.out.println("-->Home<--");
-        case "s" -> {
-            System.out.println("-->Search by title<--");
-            System.out.println("Enter the title of the song:");
-            searchByTitle(library, input);
-        }
-        case "l" -> {
-            System.out.println("-->Library<--");
-            displayLibrary(library);
-            System.out.println("Would you like to play or mark a song as favorite? (play/favorite/n)");
-            String response = input.nextLine().toLowerCase();
-            if (response.equals("play")) {
-                playFromLibrary(library, input);
-            } else if (response.equals("favorite")) {
-                markFavoriteFromLibrary(library, input);
-            }
-        }
-        case "f" -> {
-            System.out.println("-->Favorites<--");
-            displayFavorites(library);
-            System.out.println("Would you like to play a favorite song? (y/n)");
-            String response = input.nextLine().toLowerCase();
-            if (response.equals("y")) {
-                playFromFavorites(library, input);
-            }
-        }
-        case "q" -> System.out.println("-->Quit<--");
-        default -> System.out.println("Invalid option. Please try again.");
-    }
 }
 
   @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
@@ -103,31 +53,6 @@ public class SpotifyLikeAppMyCode {
       audioClip.loop(0); // Play once
   } catch (Exception e) {
       e.printStackTrace();
-  }
-}
-
-public static void displayLibrary(Song[] library) {
-  System.out.println("---- Library ----");
-  int index = 1;
-  for (Song song : library) {
-      System.out.println(index + ". " + song);
-      index++;
-  }
-}
-
-public static void displayFavorites(Song[] library) {
-  System.out.println("---- Favorites ----");
-  List<Song> favorites = new ArrayList<>();
-  int index = 1;
-  for (Song song : library) {
-      if (song.isFavorite()) {
-          System.out.println(index + ". " + song);
-          favorites.add(song);
-          index++;
-      }
-  }
-  if (favorites.isEmpty()) {
-      System.out.println("You have no favorite songs.");
   }
 }
 
@@ -185,10 +110,10 @@ public static void playFromFavorites(Song[] library, Scanner input) {
   }
 }
 
-  /*
+/*
    * searches the library for a song by title
    */
-  public static void searchByTitle(Song[] library, Scanner input) {
+public static void searchByTitle(Song[] library, Scanner input) {
     // get the title from the user
     String title = input.nextLine().toLowerCase();
     @SuppressWarnings("unused")
@@ -231,27 +156,32 @@ public static void playFromFavorites(Song[] library, Scanner input) {
             }
         }
     }
-  }
+}
 
   // read the audio library of music
-  @SuppressWarnings("UseSpecificCatch")
-  public static Song[] readAudioLibrary() {
+@SuppressWarnings("UseSpecificCatch")
+public static Song[] readAudioLibrary() {
     // get the file path
     final String jsonFileName = "audio-library.json";
     final String filePath = directoryPath + "\\" + jsonFileName;
 
     Song[] library = null;
     try {
-      System.out.println("Reading the file " + filePath);
-      JsonReader reader = new JsonReader(new FileReader(filePath));
-      library = new Gson().fromJson(reader, Song[].class);
+        System.out.println("Reading the file " + filePath);
+        JsonReader reader = new JsonReader(new FileReader(filePath));
+        library = new Gson().fromJson(reader, Song[].class);
+        if (library == null) {
+            System.out.println("Library is null after reading JSON.");
+        } else {
+            System.out.println("Successfully loaded " + library.length + " songs.");
+        }
     } catch (Exception e) {
-      System.out.printf("ERROR: unable to read the file %s\n", filePath);
-      System.out.println();
+        System.out.printf("ERROR: unable to read the file %s\n", filePath);
+        e.printStackTrace();
     }
 
     return library;
-  }
+}
 
     public static String getDirectoryPath() {
         return directoryPath;
