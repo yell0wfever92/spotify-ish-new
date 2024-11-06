@@ -9,6 +9,7 @@ import java.util.Scanner;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.SwingUtilities;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -26,29 +27,12 @@ public class SpotifyLikeAppMyCode {
   // "main" makes this class a java app that can be executed
   @SuppressWarnings("ConvertToTryWithResources")
   public static void main(final String[] args) {
-    // reading audio library from json file
-    Song[] library = readAudioLibrary();
-
-    // create a scanner for user input
-    Scanner input = new Scanner(System.in);
-
-    String userInput = "";
-    while (!userInput.equals("q")) {
-      menu();
-
-      // get input
-      userInput = input.nextLine();
-
-      // accept upper or lower case commands
-      userInput = userInput.toLowerCase();
-
-      // do something
-      handleMenu(userInput, library, input);
-    }
-
-    // close the scanner
-    input.close();
-  }
+    SwingUtilities.invokeLater(() -> {
+        Song[] library = readAudioLibrary();
+        String directoryPath = getDirectoryPath();
+        new SpotifyLikeAppGUI(library, directoryPath);
+    });
+}
 
   /*
    * displays the menu for the app
