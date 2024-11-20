@@ -22,15 +22,15 @@ private static Clip audioClip;
 
 @SuppressWarnings("FieldMayBeFinal")
 private static String directoryPath =
-    "C:\\Users\\myxbo\\OneDrive\\Documents\\GitHub\\spotify-ish-new\\ish\\src\\main\\java\\com\\spotify\\example";
+    "/Users/mccarthydavid92/Documents/GitHub/spotify-ish-new/ish/src/main/java/com/spotify/example/";
 
   // "main has been updated to start the GUI"
 @SuppressWarnings("ConvertToTryWithResources")
 public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> {
         Song[] library = readAudioLibrary();
-        String directoryPath = getDirectoryPath();
-        new SpotifyLikeAppGUI(library, directoryPath);
+        String localDirectoryPath = getDirectoryPath();
+        new SpotifyLikeAppGUI(library, localDirectoryPath);
     });
 }
 
@@ -42,7 +42,7 @@ audioClip.close();
 
 try {
 String filename = song.fileName();
-String filePath = directoryPath + "\\wav\\" + filename;
+String filePath = directoryPath + "/wav/" + filename;
 File file = new File(filePath);
 
 audioClip = AudioSystem.getClip();
@@ -159,11 +159,11 @@ public static void searchByTitle(Song[] library, Scanner input) {
 }
 
   // read the audio library of music
-@SuppressWarnings("UseSpecificCatch")
+@SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
 public static Song[] readAudioLibrary() {
     // get the file path
     final String jsonFileName = "audio-library.json";
-    final String filePath = directoryPath + "\\" + jsonFileName;
+    final String filePath = directoryPath + "/" + jsonFileName;
 
     Song[] library = null;
     try {

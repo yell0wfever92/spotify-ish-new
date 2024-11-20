@@ -19,12 +19,13 @@ public class SpotifyLikeAppGUI {
 
     private JFrame frame;
     private JButton homeButton, searchButton, libraryButton, favoritesButton, quitButton;
-    private JButton playButton, stopButton, rewindButton;
+    private JButton playButton, pauseButton, stopButton, rewindButton, forwardButton, favoriteButton;
     private JTextArea displayArea;
     private final Song[] library;
     private final List<Song> favorites;
     private final String directoryPath;
     private Clip audioClip;
+    private Song currentlyPlayingSong;
 
     public SpotifyLikeAppGUI(Song[] library, String directoryPath) {
         this.library = library;
@@ -63,12 +64,18 @@ public class SpotifyLikeAppGUI {
         // Playback control panel
         JPanel controlPanel = new JPanel();
         playButton = new JButton("Play");
+        pauseButton = new JButton("Pause");
         stopButton = new JButton("Stop");
         rewindButton = new JButton("Rewind");
+        forwardButton = new JButton("Forward");
+        favoriteButton = new JButton("Favorite");
 
         controlPanel.add(playButton);
+        controlPanel.add(pauseButton);
         controlPanel.add(stopButton);
         controlPanel.add(rewindButton);
+        controlPanel.add(forwardButton);
+        controlPanel.add(favoriteButton);
 
         frame.add(controlPanel, BorderLayout.SOUTH);
 
@@ -87,8 +94,11 @@ public class SpotifyLikeAppGUI {
         quitButton.addActionListener(e -> quitApplication());
 
         playButton.addActionListener(e -> playSelectedSong());
+        pauseButton.addActionListener(e -> pauseOrResumeSong());
         stopButton.addActionListener(e -> stopSong());
         rewindButton.addActionListener(e -> rewindSong());
+        forwardButton.addActionListener(e -> forwardSong());
+        favoriteButton.addActionListener(e -> favoriteCurrentSong());
     }
 
     private void displayHome() {
@@ -168,13 +178,13 @@ public class SpotifyLikeAppGUI {
     private void addToFavorites(Song song) {
         if (!favorites.contains(song)) {
             favorites.add(song);
+            song.setFavorite(true);
             displayArea.append("\nMarked as favorite: " + song.name());
         } else {
             displayArea.append("\n" + song.name() + " is already in your favorites.");
         }
     }
 
-    @SuppressWarnings("CallToPrintStackTrace")
     private void playSong(Song song) {
         stopSong(); // Stop any currently playing song
         try {
@@ -186,6 +196,7 @@ public class SpotifyLikeAppGUI {
             AudioInputStream in = AudioSystem.getAudioInputStream(file);
             audioClip.open(in);
             audioClip.start();
+            currentlyPlayingSong = song;
             displayArea.append("\nNow playing: " + song.name());
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,18 +208,56 @@ public class SpotifyLikeAppGUI {
         JOptionPane.showMessageDialog(frame, "Please select a song from Library, Search, or Favorites.");
     }
 
+    private void pauseOrResumeSong() {
+        if (audioClip != null) {
+            if (audioClip.isRunning()) {
+                audioClip.stop();
+                displayArea.append("\nPlayback paused.");
+            } else {
+                audioClip.start();
+                displayArea.append("\nPlayback resumed.");
+            }
+        }
+    }
+
     private void stopSong() {
-        if (audioClip != null && audioClip.isRunning()) {
+        if (audioClip != null) {
             audioClip.stop();
-            displayArea.append("\nPlayback stopped.");
+            audioClip.setMicrosecondPosition(0);
+            displayArea.append("\nPlayback stopped and reset.");
         }
     }
 
     private void rewindSong() {
         if (audioClip != null) {
-            audioClip.setMicrosecondPosition(0);
-            audioClip.start();
-            displayArea.append("\nSong rewound to the beginning.");
+            long currentPosition = audioClip.getMicrosecondPosition();
+            long newPosition = currentPosition - 5_000_000; // rewind 5 seconds
+            if (newPosition < 0) {
+                newPosition = 0;
+            }
+            audioClip.setMicrosecondPosition(newPosition);
+            displayArea.append("\nSong rewound 5 seconds.");
+        }
+    }
+
+    private void forwardSong() {
+        if (audioClip != null) {
+            long currentPosition = audioClip.getMicrosecondPosition();
+            long clipLength = audioClip.getMicrosecondLength();
+            long newPosition = currentPosition + 5_000_000; // forward 5 seconds
+            if (newPosition > clipLength) {
+                newPosition = clipLength;
+            }
+            audioClip.setMicrosecondPosition(newPosition);
+            displayArea.append("\nSong forwarded 5 seconds.");
+        }
+    }
+
+    private void favoriteCurrentSong() {
+        if (currentlyPlayingSong != null) {
+            addToFavorites(currentlyPlayingSong);
+        } else {
+            JOptionPane.showMessageDialog(frame, "No song is currently playing to favorite.");
         }
     }
 
@@ -236,6 +285,7 @@ public class SpotifyLikeAppGUI {
                 String[] options = new String[matchingSongs.size()];
                 for (int i = 0; i < matchingSongs.size(); i++) {
                     options[i] = matchingSongs.get(i).name();
+                    displayArea.append((i + 1) + ". " + matchingSongs.get(i).name() + "\n");
                 }
                 String selectedSong = (String) JOptionPane.showInputDialog(
                         frame,
