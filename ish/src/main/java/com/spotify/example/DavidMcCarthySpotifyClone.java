@@ -18,7 +18,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
 // declares a class for the app
-public class SpotifyLikeAppMyCode {
+public class DavidMcCarthySpotifyClone {
 
   // the current audio clip
 private static Clip audioClip;
