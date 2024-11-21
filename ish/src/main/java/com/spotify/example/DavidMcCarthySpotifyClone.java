@@ -27,7 +27,7 @@ public class DavidMcCarthySpotifyClone {
   // the current audio clip
 private static Clip audioClip;
 
-  // "main has been updated to start the GUI"
+  // starts the GUI
 @SuppressWarnings("ConvertToTryWithResources")
 public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> {
@@ -115,9 +115,8 @@ try {
 }
 }
 
-/*
-   * searches the library for a song by title
-   */
+   // searches the library for a song by title
+
 public static void searchByTitle(Song[] library, Scanner input) {
     // get the title from the user
     String title = input.nextLine().toLowerCase();
