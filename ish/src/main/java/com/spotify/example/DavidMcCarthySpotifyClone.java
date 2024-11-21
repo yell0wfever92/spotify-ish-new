@@ -25,15 +25,15 @@ private static Clip audioClip;
 
 @SuppressWarnings("FieldMayBeFinal")
 private static String directoryPath =
-    "/Users/mccarthydavid92/Documents/GitHub/spotify-ish-new/ish/src/main/java/com/spotify/example/";
+    "/spotify-ish-new/ish/src/main/java/com/spotify/example/";
 
   // "main has been updated to start the GUI"
 @SuppressWarnings("ConvertToTryWithResources")
 public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> {
         Song[] library = readAudioLibrary();
-        String localDirectoryPath = getDirectoryPath();
-        new SpotifyLikeAppGUI(library, localDirectoryPath);
+        String directoryPath = getDirectoryPath();
+        new SpotifyLikeAppGUI(library, directoryPath);
     });
 
 }
@@ -162,6 +162,7 @@ public static void searchByTitle(Song[] library, Scanner input) {
     }
 }
 
+@SuppressWarnings("CallToPrintStackTrace")
 public static void saveAudioLibrary(Song[] library) {
     String jsonFileName = "audio-library.json";
     String filePath = directoryPath + "/" + jsonFileName;

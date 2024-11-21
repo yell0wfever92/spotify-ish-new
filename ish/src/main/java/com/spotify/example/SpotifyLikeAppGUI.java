@@ -40,7 +40,7 @@ public class SpotifyLikeAppGUI {
     }
 
     private void initialize() {
-        frame = new JFrame("Spotify-Like App");
+        frame = new JFrame("David McCarthy's Spotify Clone");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLayout(new BorderLayout());
@@ -137,7 +137,7 @@ public class SpotifyLikeAppGUI {
 
     private void displayHome() {
         listModel.clear();
-        listModel.addElement("Welcome to the Spotify-Like App!");
+        listModel.addElement("Welcome to my way better clone!");
         listModel.addElement("Use the buttons above to navigate.");
         currentDisplaySongs = new ArrayList<>();
     }

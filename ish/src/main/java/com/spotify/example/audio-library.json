@@ -6,7 +6,7 @@
     "isFavorite": true,
     "year": "2007",
     "genre": "Dance/Electronic",
-    "filePath": "ish/src/main/java/com/spotify/example/wav/"
+    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
   },
   {
     "name": "Separate Ways (World\u0027s Apart) - Stranger Things Remix",
@@ -15,7 +15,7 @@
     "isFavorite": false,
     "year": "2022",
     "genre": "Orchestral",
-    "filePath": "ish/src/main/java/com/spotify/example/wav/"
+    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
   },
   {
     "name": "Spirit of Life",
@@ -24,7 +24,7 @@
     "isFavorite": false,
     "year": "2011",
     "genre": "Dance/Electronic",
-    "filePath": "ish/src/main/java/com/spotify/example/wav/"
+    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
   },
   {
     "name": "Stranger Things 4 - Ending Finale Score",
@@ -33,7 +33,7 @@
     "isFavorite": false,
     "year": "2022",
     "genre": "Orchestral",
-    "filePath": "ish/src/main/java/com/spotify/example/wav/"
+    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
   },
   {
     "name": "Traces",
@@ -42,7 +42,7 @@
     "isFavorite": false,
     "year": "2021",
     "genre": "Dance/Electronic",
-    "filePath": "ish/src/main/java/com/spotify/example/wav/"
+    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
   },
   {
     "name": "Trinity Suite",
@@ -51,7 +51,7 @@
     "isFavorite": true,
     "year": "2009",
     "genre": "Orchestral",
-    "filePath": "ish/src/main/java/com/spotify/example/wav/"
+    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
   },
   {
     "name": "Welcome to the Party",
@@ -60,6 +60,6 @@
     "isFavorite": false,
     "year": "2018",
     "genre": "Hip-Hop/Rap",
-    "filePath": "ish/src/main/java/com/spotify/example/wav/"
+    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
   }
 ]
