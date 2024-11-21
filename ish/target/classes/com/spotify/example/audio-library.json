@@ -1,27 +1,65 @@
 [
   {
-    "name": "Teach Me How to Dougie",
-    "artist": "Cali Swag District",
-    "fileName": "dougie-crop.wav"
+    "name": "Elements of Life",
+    "artist": "Tiësto",
+    "fileName": "Elements Of Life.wav",
+    "year": "2007",
+    "genre": "Dance/Electronic",
+    "filePath": "ish/src/main/java/com/spotify/example/wav/",
+    "isFavorite": false
   },
   {
-    "name": "Could've Been (Tik Tok Remix)",
-    "artist": "H.E.R.",
-    "fileName": "her-crop.wav"
+    "name": "Separate Ways (World's Apart) - Stranger Things Remix",
+    "artist": "Journey",
+    "fileName": "Separate Ways (Worlds Apart) (Steve Perry .wav",
+    "year": "2022",
+    "genre": "Orchestral",
+    "filePath": "ish/src/main/java/com/spotify/example/wav/",
+    "isFavorite": false
   },
   {
-    "name": "On Me",
-    "artist": "Lil Baby",
-    "fileName": "lil-baby-crop.wav"
+    "name": "Spirit of Life",
+    "artist": "Blackmill",
+    "fileName": "Spirit of Life.wav",
+    "year": "2011",
+    "genre": "Dance/Electronic",
+    "filePath": "ish/src/main/java/com/spotify/example/wav/",
+    "isFavorite": false
   },
   {
-    "name": "Mo Money Mo Problems",
-    "artist": "Notorios BIG",
-	  "fileName": "biggie-crop.wav"
+    "name": "Stranger Things 4 - Ending Finale Score",
+    "artist": "Stranger Things",
+    "fileName": "Stranger Things Soundtrack _ Season 4 Ep 9 _ Ending Finale _ Epic Orchestral Version _ Rob Simonsen.wav",
+    "year": "2022",
+    "genre": "Orchestral",
+    "filePath": "ish/src/main/java/com/spotify/example/wav/",
+    "isFavorite": false
   },
   {
-    "name": "Industry Baby",
-    "artist": "Lil Nas X",
-    "fileName": "lil-nas-x-crop.wav"
+    "name": "Traces",
+    "artist": "Stratus",
+    "fileName": "Traces.wav",
+    "year": "2021",
+    "genre": "Dance/Electronic",
+    "filePath": "ish/src/main/java/com/spotify/example/wav/",
+    "isFavorite": false
+  },
+  {
+    "name": "Trinity Suite",
+    "artist": "Dexter - Season 4",
+    "fileName": "Trinity Suite.wav",
+    "year": "2009",
+    "genre": "Orchestral",
+    "filePath": "ish/src/main/java/com/spotify/example/wav/",
+    "isFavorite": false
+  },
+  {
+    "name": "Welcome to the Party",
+    "artist": "Diplo, French Montana & Lil Pump",
+    "fileName": "welcome-to-the-party-128-ytshorts.savetube.me.wav",
+    "year": "2018",
+    "genre": "Hip-Hop/Rap",
+    "filePath": "ish/src/main/java/com/spotify/example/wav/",
+    "isFavorite": false
   }
 ]
