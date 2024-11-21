@@ -122,17 +122,17 @@ public class SpotifyLikeAppGUI {
                         Song selectedSong = currentDisplaySongs.get(index);
                         int action = JOptionPane.showConfirmDialog(
                                 frame,
-                                "Would you like to mark this song as favorite?",
+                                "Would you like to favorite/unfavorite this song?",
                                 "Favorite",
                                 JOptionPane.YES_NO_OPTION);
                         if (action == JOptionPane.YES_OPTION) {
-                            addToFavorites(selectedSong);
+                            toggleFavorite(selectedSong);
                         }
                         playSong(selectedSong);
                     }
                 }
             }
-        });
+        });        
     }
 
     private void displayHome() {
@@ -166,13 +166,15 @@ public class SpotifyLikeAppGUI {
         }
     }
 
-    private void addToFavorites(Song song) {
-        if (!favorites.contains(song)) {
+    private void toggleFavorite(Song song) {
+        if (favorites.contains(song)) {
+            favorites.remove(song);
+            song.setFavorite(false);
+            JOptionPane.showMessageDialog(frame, song.name() + " has been removed from your favorites.");
+        } else {
             favorites.add(song);
             song.setFavorite(true);
             JOptionPane.showMessageDialog(frame, song.name() + " has been added to your favorites.");
-        } else {
-            JOptionPane.showMessageDialog(frame, song.name() + " is already in your favorites.");
         }
     }
 
@@ -182,14 +184,19 @@ public class SpotifyLikeAppGUI {
         try {
             String filename = song.fileName();
             String filePath = directoryPath + File.separator + "wav" + File.separator + filename;
-            System.out.println("Attempting to play file: " + filePath); // Debug statement
             File file = new File(filePath);
             audioClip = AudioSystem.getClip();
             AudioInputStream in = AudioSystem.getAudioInputStream(file);
             audioClip.open(in);
             audioClip.start();
             currentlyPlayingSong = song;
-            JOptionPane.showMessageDialog(frame, "Now playing: " + song.name());
+    
+            // Display all song information
+            String songInfo = String.format(
+                "Now playing:\nTitle: %s\nArtist: %s\nYear: %s\nGenre: %s",
+                song.name(), song.artist(), song.year(), song.genre()
+            );
+            JOptionPane.showMessageDialog(frame, songInfo);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(frame, "Unable to play the selected song.");
@@ -253,11 +260,12 @@ public class SpotifyLikeAppGUI {
 
     private void favoriteCurrentSong() {
         if (currentlyPlayingSong != null) {
-            addToFavorites(currentlyPlayingSong);
+            toggleFavorite(currentlyPlayingSong);
         } else {
             JOptionPane.showMessageDialog(frame, "No song is currently playing to favorite.");
         }
     }
+    
 
     private void quitApplication() {
         if (audioClip != null && audioClip.isRunning()) {
