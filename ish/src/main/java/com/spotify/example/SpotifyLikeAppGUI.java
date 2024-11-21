@@ -3,7 +3,8 @@ package com.spotify.example;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,6 @@ public class SpotifyLikeAppGUI {
     private DefaultListModel<String> listModel;
     private final Song[] library;
     private final List<Song> favorites;
-    private final String directoryPath;
     private Clip audioClip;
     private Song currentlyPlayingSong;
     private List<Song> currentDisplaySongs;
@@ -95,7 +95,6 @@ public class SpotifyLikeAppGUI {
         frame.setVisible(true);
     }
 
-    @SuppressWarnings("unused")
     private void addActionListeners() {
         homeButton.addActionListener(e -> displayHome());
         searchButton.addActionListener(e -> searchSongs());
@@ -178,28 +177,45 @@ public class SpotifyLikeAppGUI {
     }
 
     @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
-    public static void playSong(Song song) {
-        if (audioClip != null) {
-            audioClip.close();
-        }
-    
-        try {
-            String resourcePath = "wav/" + song.fileName();
-            URL audioUrl = DavidMcCarthySpotifyClone.class.getClassLoader().getResource(resourcePath);
-            if (audioUrl == null) {
-                System.out.println("ERROR: Audio file not found: " + resourcePath);
-                return;
-            }
-            audioClip = AudioSystem.getClip();
-            AudioInputStream in = AudioSystem.getAudioInputStream(audioUrl);
-    
-            audioClip.open(in);
-            audioClip.setMicrosecondPosition(0);
-            audioClip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void playSong(Song song) {
+    if (audioClip != null) {
+        audioClip.close();
     }
+
+    try {
+        String resourcePath = "wav/" + song.fileName();
+        System.out.println("Attempting to load resource: " + resourcePath);
+
+        InputStream audioSrc = DavidMcCarthySpotifyClone.class.getClassLoader().getResourceAsStream(resourcePath);
+        if (audioSrc == null) {
+            System.out.println("ERROR: Audio file not found: " + resourcePath);
+            JOptionPane.showMessageDialog(frame, "Audio file not found: " + resourcePath);
+            return;
+        }
+        System.out.println("Audio resource found.");
+
+        InputStream bufferedIn = new BufferedInputStream(audioSrc);
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
+
+        audioClip = AudioSystem.getClip();
+        audioClip.open(audioStream);
+        audioClip.setMicrosecondPosition(0);
+        audioClip.start();
+
+        currentlyPlayingSong = song;
+        // Display song information
+        String songInfo = String.format(
+            "Now playing:\nTitle: %s\nArtist: %s\nYear: %s\nGenre: %s",
+            song.name(), song.artist(), song.year(), song.genre()
+        );
+        JOptionPane.showMessageDialog(frame, songInfo);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(frame, "Unable to play the selected song.");
+    }
+}
+
 
     private void playSelectedSong() {
         int index = songList.getSelectedIndex();

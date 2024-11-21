@@ -1,5 +1,7 @@
 package com.spotify.example;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +19,7 @@ import javax.swing.SwingUtilities;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 
 // declares a class for the app
 public class DavidMcCarthySpotifyClone {
@@ -29,7 +32,6 @@ private static Clip audioClip;
 public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> {
         Song[] library = readAudioLibrary();
-        String directoryPath = getDirectoryPath();
         new SpotifyLikeAppGUI(library);
     });
 
@@ -164,11 +166,18 @@ public static void searchByTitle(Song[] library, Scanner input) {
 @SuppressWarnings("CallToPrintStackTrace")
 public static void saveAudioLibrary(Song[] library) {
     String jsonFileName = "audio-library.json";
-    String filePath = directoryPath + "/" + jsonFileName;
+    // Choose a directory where the application can write files
+    String userHome = System.getProperty("user.home");
+    String appDirectory = userHome + File.separator + ".spotifylikeapp";
+    File directory = new File(appDirectory);
+    if (!directory.exists()) {
+        directory.mkdir(); // Create the directory if it doesn't exist
+    }
+    String filePath = appDirectory + File.separator + jsonFileName;
     try (FileWriter writer = new FileWriter(filePath)) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         gson.toJson(library, writer);
-        System.out.println("Library saved successfully.");
+        System.out.println("Library saved successfully to " + filePath);
     } catch (IOException e) {
         System.out.println("Failed to save library.");
         e.printStackTrace();
@@ -178,23 +187,43 @@ public static void saveAudioLibrary(Song[] library) {
   // read the audio library of music
 @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
 public static Song[] readAudioLibrary() {
+    String jsonFileName = "audio-library.json";
+    String userHome = System.getProperty("user.home");
+    String appDirectory = userHome + File.separator + ".spotifylikeapp";
+    String filePath = appDirectory + File.separator + jsonFileName;
+
     Song[] library = null;
-    try (InputStream inputStream = DavidMcCarthySpotifyClone.class.getClassLoader().getResourceAsStream("audio-library.json");
-         InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-        if (inputStream == null) {
-            System.out.println("ERROR: audio-library.json not found in classpath.");
-            return new Song[0]; // or handle as appropriate
+    File externalFile = new File(filePath);
+    try {
+        if (externalFile.exists()) {
+            // Read from the external file
+            System.out.println("Reading library from external file: " + filePath);
+            try (JsonReader reader = new JsonReader(new FileReader(externalFile))) {
+                library = new Gson().fromJson(reader, Song[].class);
+            }
+        } else {
+            // Read from the internal resource
+            System.out.println("Reading library from internal resource.");
+            InputStream inputStream = DavidMcCarthySpotifyClone.class.getClassLoader().getResourceAsStream(jsonFileName);
+            if (inputStream == null) {
+                System.out.println("ERROR: audio-library.json not found in classpath.");
+                return new Song[0];
+            }
+            try (InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+                library = new Gson().fromJson(reader, Song[].class);
+            }
         }
-        library = new Gson().fromJson(reader, Song[].class);
-        System.out.println("Successfully loaded " + library.length + " songs.");
+        if (library == null) {
+            System.out.println("Library is null after reading JSON.");
+            library = new Song[0];
+        } else {
+            System.out.println("Successfully loaded " + library.length + " songs.");
+        }
     } catch (Exception e) {
-        System.out.println("ERROR: Unable to read the audio-library.json file from resources.");
+        System.out.println("ERROR: Unable to read the audio-library.json file.");
         e.printStackTrace();
     }
     return library;
 }
 
-    public static String getDirectoryPath() {
-        return directoryPath;
-    }
 }
