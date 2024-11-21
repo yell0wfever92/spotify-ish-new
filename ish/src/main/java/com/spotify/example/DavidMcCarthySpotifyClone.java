@@ -1,9 +1,11 @@
 package com.spotify.example;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,7 +17,6 @@ import javax.swing.SwingUtilities;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
 
 // declares a class for the app
 public class DavidMcCarthySpotifyClone {
@@ -23,41 +24,39 @@ public class DavidMcCarthySpotifyClone {
   // the current audio clip
 private static Clip audioClip;
 
-@SuppressWarnings("FieldMayBeFinal")
-private static String directoryPath =
-    "/spotify-ish-new/ish/src/main/java/com/spotify/example/";
-
   // "main has been updated to start the GUI"
 @SuppressWarnings("ConvertToTryWithResources")
 public static void main(final String[] args) {
     SwingUtilities.invokeLater(() -> {
         Song[] library = readAudioLibrary();
         String directoryPath = getDirectoryPath();
-        new SpotifyLikeAppGUI(library, directoryPath);
+        new SpotifyLikeAppGUI(library);
     });
 
 }
 
 @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
 public static void playSong(Song song) {
-if (audioClip != null) {
-audioClip.close();
-}
+    if (audioClip != null) {
+        audioClip.close();
+    }
 
-try {
-String filename = song.fileName();
-String filePath = directoryPath + "/wav/" + filename;
-File file = new File(filePath);
+    try {
+        String resourcePath = "wav/" + song.fileName();
+        URL audioUrl = DavidMcCarthySpotifyClone.class.getClassLoader().getResource(resourcePath);
+        if (audioUrl == null) {
+            System.out.println("ERROR: Audio file not found: " + resourcePath);
+            return;
+        }
+        audioClip = AudioSystem.getClip();
+        AudioInputStream in = AudioSystem.getAudioInputStream(audioUrl);
 
-audioClip = AudioSystem.getClip();
-final AudioInputStream in = AudioSystem.getAudioInputStream(file);
-
-audioClip.open(in);
-audioClip.setMicrosecondPosition(0);
-      audioClip.loop(0); // Play once
-} catch (Exception e) {
-e.printStackTrace();
-}
+        audioClip.open(in);
+        audioClip.setMicrosecondPosition(0);
+        audioClip.start();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 }
 
 public static void playFromLibrary(Song[] library, Scanner input) {
@@ -179,25 +178,19 @@ public static void saveAudioLibrary(Song[] library) {
   // read the audio library of music
 @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
 public static Song[] readAudioLibrary() {
-    // get the file path
-    final String jsonFileName = "audio-library.json";
-    final String filePath = directoryPath + "/" + jsonFileName;
-
     Song[] library = null;
-    try {
-        System.out.println("Reading the file " + filePath);
-        JsonReader reader = new JsonReader(new FileReader(filePath));
-        library = new Gson().fromJson(reader, Song[].class);
-        if (library == null) {
-            System.out.println("Library is null after reading JSON.");
-        } else {
-            System.out.println("Successfully loaded " + library.length + " songs.");
+    try (InputStream inputStream = DavidMcCarthySpotifyClone.class.getClassLoader().getResourceAsStream("audio-library.json");
+         InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+        if (inputStream == null) {
+            System.out.println("ERROR: audio-library.json not found in classpath.");
+            return new Song[0]; // or handle as appropriate
         }
+        library = new Gson().fromJson(reader, Song[].class);
+        System.out.println("Successfully loaded " + library.length + " songs.");
     } catch (Exception e) {
-        System.out.printf("ERROR: unable to read the file %s\n", filePath);
+        System.out.println("ERROR: Unable to read the audio-library.json file from resources.");
         e.printStackTrace();
     }
-
     return library;
 }
 

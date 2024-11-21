@@ -3,7 +3,7 @@ package com.spotify.example;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +32,8 @@ public class SpotifyLikeAppGUI {
     private Song currentlyPlayingSong;
     private List<Song> currentDisplaySongs;
 
-    public SpotifyLikeAppGUI(Song[] library, String directoryPath) {
+    public SpotifyLikeAppGUI(Song[] library) {
         this.library = library;
-        this.directoryPath = directoryPath;
         this.favorites = new ArrayList<>();
         initialize();
     }
@@ -179,27 +178,26 @@ public class SpotifyLikeAppGUI {
     }
 
     @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
-    private void playSong(Song song) {
-        stopSong(); // Stop any currently playing song
-        try {
-            String filename = song.fileName();
-            String filePath = directoryPath + File.separator + "wav" + File.separator + filename;
-            File file = new File(filePath);
-            audioClip = AudioSystem.getClip();
-            AudioInputStream in = AudioSystem.getAudioInputStream(file);
-            audioClip.open(in);
-            audioClip.start();
-            currentlyPlayingSong = song;
+    public static void playSong(Song song) {
+        if (audioClip != null) {
+            audioClip.close();
+        }
     
-            // Display all song information
-            String songInfo = String.format(
-                "Now playing:\nTitle: %s\nArtist: %s\nYear: %s\nGenre: %s",
-                song.name(), song.artist(), song.year(), song.genre()
-            );
-            JOptionPane.showMessageDialog(frame, songInfo);
+        try {
+            String resourcePath = "wav/" + song.fileName();
+            URL audioUrl = DavidMcCarthySpotifyClone.class.getClassLoader().getResource(resourcePath);
+            if (audioUrl == null) {
+                System.out.println("ERROR: Audio file not found: " + resourcePath);
+                return;
+            }
+            audioClip = AudioSystem.getClip();
+            AudioInputStream in = AudioSystem.getAudioInputStream(audioUrl);
+    
+            audioClip.open(in);
+            audioClip.setMicrosecondPosition(0);
+            audioClip.start();
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(frame, "Unable to play the selected song.");
         }
     }
 

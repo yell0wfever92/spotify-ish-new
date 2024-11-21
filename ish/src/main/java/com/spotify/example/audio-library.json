@@ -5,8 +5,7 @@
     "fileName": "Elements Of Life.wav",
     "isFavorite": true,
     "year": "2007",
-    "genre": "Dance/Electronic",
-    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
+    "genre": "Dance/Electronic"
   },
   {
     "name": "Separate Ways (World\u0027s Apart) - Stranger Things Remix",
@@ -14,8 +13,7 @@
     "fileName": "Separate Ways (Worlds Apart) (Steve Perry .wav",
     "isFavorite": false,
     "year": "2022",
-    "genre": "Orchestral",
-    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
+    "genre": "Orchestral"
   },
   {
     "name": "Spirit of Life",
@@ -23,8 +21,7 @@
     "fileName": "Spirit of Life.wav",
     "isFavorite": false,
     "year": "2011",
-    "genre": "Dance/Electronic",
-    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
+    "genre": "Dance/Electronic"
   },
   {
     "name": "Stranger Things 4 - Ending Finale Score",
@@ -32,8 +29,7 @@
     "fileName": "Stranger Things Soundtrack _ Season 4 Ep 9 _ Ending Finale _ Epic Orchestral Version _ Rob Simonsen.wav",
     "isFavorite": false,
     "year": "2022",
-    "genre": "Orchestral",
-    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
+    "genre": "Orchestral"
   },
   {
     "name": "Traces",
@@ -41,8 +37,7 @@
     "fileName": "Traces.wav",
     "isFavorite": false,
     "year": "2021",
-    "genre": "Dance/Electronic",
-    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
+    "genre": "Dance/Electronic"
   },
   {
     "name": "Trinity Suite",
@@ -50,8 +45,7 @@
     "fileName": "Trinity Suite.wav",
     "isFavorite": true,
     "year": "2009",
-    "genre": "Orchestral",
-    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
+    "genre": "Orchestral"
   },
   {
     "name": "Welcome to the Party",
@@ -59,7 +53,6 @@
     "fileName": "welcome-to-the-party-128-ytshorts.savetube.me.wav",
     "isFavorite": false,
     "year": "2018",
-    "genre": "Hip-Hop/Rap",
-    "filePath": "/spotify-ish-new/ish/src/main/java/com/spotify/example/wav/"
+    "genre": "Hip-Hop/Rap"
   }
 ]
