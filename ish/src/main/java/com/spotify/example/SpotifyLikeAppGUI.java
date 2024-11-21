@@ -4,6 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +32,8 @@ public class SpotifyLikeAppGUI {
     private JList<String> songList;
     private DefaultListModel<String> listModel;
     private final Song[] library;
-    private final List<Song> favorites;
+    @SuppressWarnings("FieldMayBeFinal")
+    private List<Song> favorites;
     private Clip audioClip;
     private Song currentlyPlayingSong;
     private List<Song> currentDisplaySongs;
@@ -83,6 +89,8 @@ public class SpotifyLikeAppGUI {
 
         frame.add(controlPanel, BorderLayout.SOUTH);
 
+        loadFavorites();
+
         // Add action listeners for buttons
         addActionListeners();
 
@@ -135,7 +143,7 @@ public class SpotifyLikeAppGUI {
 
     private void displayHome() {
         listModel.clear();
-        listModel.addElement("Welcome to my way better clone!");
+        listModel.addElement("Welcome to the prime competitor to Spotify in the making!");
         listModel.addElement("Use the buttons above to navigate.");
         currentDisplaySongs = new ArrayList<>();
     }
@@ -280,6 +288,39 @@ public class SpotifyLikeAppGUI {
         }
     }
     
+    @SuppressWarnings("CallToPrintStackTrace")
+    private void saveFavorites() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("favorites.txt"))) {
+            for (Song song : favorites) {
+                writer.write(song.fileName());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("CallToPrintStackTrace")
+    private void loadFavorites() {
+        favorites.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader("favorites.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                for (Song song : library) {
+                    if (song.fileName().equals(line)) {
+                        favorites.add(song);
+                        song.setFavorite(true);
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            // If the file doesn't exist, it's the first run; ignore the exception.
+            if (!(e instanceof java.io.FileNotFoundException)) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void quitApplication() {
         if (audioClip != null && audioClip.isRunning()) {
@@ -287,6 +328,7 @@ public class SpotifyLikeAppGUI {
             audioClip.close();
         }
 
+        saveFavorites(); // Save the list of favorite songs
         DavidMcCarthySpotifyClone.saveAudioLibrary(library);
         frame.dispose();
     }
