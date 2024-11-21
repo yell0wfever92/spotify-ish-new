@@ -2,6 +2,8 @@ package com.spotify.example;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,6 +14,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.SwingUtilities;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
 // declares a class for the app
@@ -32,6 +35,7 @@ public static void main(final String[] args) {
         String localDirectoryPath = getDirectoryPath();
         new SpotifyLikeAppGUI(library, localDirectoryPath);
     });
+
 }
 
 @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace"})
@@ -155,6 +159,19 @@ public static void searchByTitle(Song[] library, Scanner input) {
                 System.out.println("Invalid input.");
             }
         }
+    }
+}
+
+public static void saveAudioLibrary(Song[] library) {
+    String jsonFileName = "audio-library.json";
+    String filePath = directoryPath + "/" + jsonFileName;
+    try (FileWriter writer = new FileWriter(filePath)) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        gson.toJson(library, writer);
+        System.out.println("Library saved successfully.");
+    } catch (IOException e) {
+        System.out.println("Failed to save library.");
+        e.printStackTrace();
     }
 }
 

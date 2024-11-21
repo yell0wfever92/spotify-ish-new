@@ -272,6 +272,8 @@ public class SpotifyLikeAppGUI {
             audioClip.stop();
             audioClip.close();
         }
+
+        SpotifyLikeAppMyCode.saveAudioLibrary(library);
         frame.dispose();
     }
 
